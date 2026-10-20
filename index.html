@@ -70,13 +70,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,'Appl
 .dlg{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(8,8,10,.78)}
 .dlg.on{display:flex}
 .box{width:min(640px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--panel);border-radius:20px;display:flex;flex-wrap:wrap;position:relative;border:1px solid var(--line)}
-.box .big{flex:1 1 240px;min-height:320px;background:#222226 center top/cover no-repeat}
-.box .info{flex:1 1 260px;padding:24px 24px 26px}
+.box .big{flex:1 1 240px;min-height:320px;background:#222226 center center/cover no-repeat}
+.box .info{flex:1 1 260px;padding:24px 24px 26px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
 .box .dp{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--c);padding-right:34px}
 .box h3{margin:8px 0 2px;font-size:26px;font-weight:900;color:var(--head);line-height:1.15}
 .box .meta{font-size:12px;color:var(--mut)}
 .box .rk2{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;color:var(--bg);background:var(--c);border-radius:5px;padding:2px 8px}
-.box .rows{font-size:13px;margin-top:16px;padding-top:12px}
+.box .rows{font-size:13px;margin-top:16px;padding-top:12px;align-self:stretch}
 .box .rows em{flex-basis:34px}
 .x{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(17,17,19,.7);color:var(--ink);font-size:18px;line-height:32px;cursor:pointer}
 .langs{display:flex;gap:2px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px;flex-wrap:wrap}
@@ -164,8 +164,8 @@ const DEPTS = [
       kind:["—", "—", "—", "—", "—", "—"], ability:["비이능 · 드론 운용", "No ability · Drone operation", "非異能 · ドローン運用", "无异能 · 无人机操作", "無異能 · 無人機操作", "Sin habilidad · Operación de drones"],
       img:"https://i.ibb.co/93rmW7St/9.png" },
   ]},
-  { no:"04", en:"MANAGEMENT", color:"#9d8bb8", label:["관리과", "Management", "管理課", "管理课", "管理課", "Gestión"], people:[
-    { name:["채이레", "Chae Ire", "チェ・イレ", "蔡伊礼", "蔡伊禮", "Chae Ire"], rank:["관리과장", "Head of Management", "管理課長", "管理课长", "管理課長", "Jefa de Gestión"], sex:"f", age:"28", grade:"S",
+  { no:"04", en:"ADMINISTRATION", color:"#9d8bb8", label:["관리과", "Administration", "管理課", "管理课", "管理課", "Gestión"], people:[
+    { name:["채이레", "Chae Ire", "チェ・イレ", "蔡伊礼", "蔡伊禮", "Chae Ire"], rank:["관리과장", "Head of Administration", "管理課長", "管理课长", "管理課長", "Jefa de Gestión"], sex:"f", age:"28", grade:"S",
       kind:["감지계", "Sensory", "感知系", "感知系", "感知系", "Percepción"], ability:["감정(鑑定)", "Appraisal", "鑑定", "鉴定", "鑑定", "Tasación"],
       img:"https://i.ibb.co/2084X54H/13.png" },
     { name:["도의현", "Do Uihyeon", "ト・ウィヒョン", "都义贤", "都義賢", "Do Uihyeon"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"m", age:"26", grade:"S",
