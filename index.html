@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인사 기록 · NEA SRB</title>
+<meta name="description" content="국가이능대응청 특수대응국 인사 기록">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#111113; --panel:#18181b; --panel2:#1d1d21; --line:#26262a;
+  --ink:#c6c6cb; --head:#e2e2e6; --mut:#86868d; --dim:#55555b; --red:#c4685f;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* header */
+.top{display:flex;justify-content:space-between;padding:22px 0 0;font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:var(--mut)}
+.hero{padding:34px 0 8px}
+.hero h1{margin:0;font-size:clamp(34px,7vw,56px);font-weight:900;line-height:1;color:var(--head);letter-spacing:-1px}
+.hero h1 i{font-style:normal;color:var(--red)}
+.hero .sub{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--red);margin-top:12px}
+
+/* toolbar */
+.bar{position:sticky;top:0;z-index:5;background:rgba(17,17,19,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:14px 0 12px;margin-top:18px;border-bottom:1px solid var(--line)}
+.bar-in{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1 1 auto;min-width:0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s,background .15s}
+.chip:hover{color:var(--ink)}
+.chip b{font-family:var(--mono);font-weight:400;font-size:10px;margin-right:5px;color:var(--c,var(--dim))}
+.chip.on{color:var(--head);border-color:var(--c,var(--mut));background:var(--panel2)}
+.search{flex:0 1 220px;min-width:150px;position:relative}
+.search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);font:inherit;font-size:12.5px;padding:7px 12px 7px 30px;border-radius:999px;outline:none}
+.search input:focus{border-color:var(--mut)}
+.search input::placeholder{color:var(--dim)}
+.search svg{position:absolute;left:11px;top:50%;margin-top:-6px;width:12px;height:12px;stroke:var(--dim)}
+
+/* sections */
+.dept{padding:34px 0 4px;scroll-margin-top:70px}
+.dept-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.dept-h .no{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--c)}
+.dept-h h2{margin:0;font-size:24px;font-weight:900;line-height:1;color:var(--head);letter-spacing:-.3px}
+.dept-h .ko{font-size:12px;color:var(--mut)}
+.dept-h .n{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--dim)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:12px}
+
+/* card */
+.card{background:var(--panel);border-radius:16px;overflow:hidden;cursor:pointer;border:1px solid transparent;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;text-align:left;font:inherit;color:inherit;padding:0}
+.card:hover{border-color:var(--line);transform:translateY(-2px)}
+.card:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.ph{aspect-ratio:3/4;background:#222226 center top/cover no-repeat;position:relative}
+.ph .gr{position:absolute;left:10px;bottom:10px;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--bg);background:var(--c);border-radius:5px;padding:2px 7px;font-weight:700}
+.bd{padding:11px 13px 13px}
+.nm{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.nm b{font-size:15px;font-weight:800;color:var(--head)}
+.nm span{font-size:10.5px;color:var(--mut)}
+.rk{font-size:11px;color:var(--c);margin-top:1px}
+.rows{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);font-size:11.5px;line-height:1.85}
+.rows div{display:flex;gap:8px}
+.rows em{font-style:normal;color:var(--mut);flex:0 0 28px}
+
+.empty{display:none;text-align:center;color:var(--dim);font-size:13px;padding:60px 0}
+.foot{margin-top:50px;padding:18px 0 26px;border-top:1px solid var(--line);text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:1.5px;color:var(--dim)}
+
+/* detail */
+.dlg{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(8,8,10,.78)}
+.dlg.on{display:flex}
+.box{width:min(640px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--panel);border-radius:20px;display:flex;flex-wrap:wrap;position:relative;border:1px solid var(--line)}
+.box .big{flex:1 1 240px;min-height:320px;background:#222226 center top/cover no-repeat}
+.box .info{flex:1 1 260px;padding:24px 24px 26px}
+.box .dp{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--c);padding-right:34px}
+.box h3{margin:8px 0 2px;font-size:26px;font-weight:900;color:var(--head);line-height:1.15}
+.box .meta{font-size:12px;color:var(--mut)}
+.box .rk2{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;color:var(--bg);background:var(--c);border-radius:5px;padding:2px 8px}
+.box .rows{font-size:13px;margin-top:16px;padding-top:12px}
+.box .rows em{flex-basis:34px}
+.x{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(17,17,19,.7);color:var(--ink);font-size:18px;line-height:32px;cursor:pointer}
+.langs{display:flex;gap:2px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px;flex-wrap:wrap}
+.langs button{border:0;background:none;color:var(--mut);font:inherit;font-size:11px;padding:4px 9px;border-radius:999px;cursor:pointer;letter-spacing:0}
+.langs button:hover{color:var(--ink)}
+.langs button.on{background:var(--panel2);color:var(--head)}
+.top{align-items:center;flex-wrap:wrap;gap:10px}
+.rows{display:grid;grid-template-columns:auto 1fr;column-gap:10px}
+.rows div{display:contents}
+:lang(ja) body,html:lang(ja){font-family:Pretendard,'Hiragino Sans','Yu Gothic UI','Meiryo','Noto Sans JP',sans-serif}
+html:lang(zh-Hans){font-family:Pretendard,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif}
+html:lang(zh-Hant){font-family:Pretendard,'PingFang TC','Microsoft JhengHei','Noto Sans TC',sans-serif}
+html:lang(ja) body,html:lang(zh-Hans) body,html:lang(zh-Hant) body{font-family:inherit}
+@media (max-width:520px){
+  .wrap{padding:0 14px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .bd{padding:9px 10px 11px}
+  .nm b{font-size:14px}
+  .rows{font-size:11px}
+  .search{flex:1 1 100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span>NEA · SRB · CLASSIFIED</span><div class="langs" id="langs"></div></div>
+  <div class="hero">
+    <h1><span id="ttl">인사 기록</span><i>.</i></h1>
+    <div class="sub" id="cnt">PERSONNEL FILE</div>
+  </div>
+</div>
+<div class="bar"><div class="wrap bar-in">
+  <div class="chips" id="chips"></div>
+  <label class="search"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><circle cx="5" cy="5" r="4"/><path d="M8 8l3 3"/></svg><input id="q" type="search" placeholder=""></label>
+</div></div>
+<main class="wrap" id="list"></main>
+<div class="wrap"><div class="empty" id="empty"></div>
+<div class="foot">NEA · SRB · @NN.zip</div></div>
+
+<div class="dlg" id="dlg"><div class="box" id="box"></div></div>
+
+<script>
+/* ───────── 명부 데이터 ─────────
+   글자 묶음 [ ] 순서: [한국어, English, 日本語, 简体, 繁體, Español]
+   사람 추가: 같은 부서 people:[ ] 안의 { … }, 덩어리 하나를 복사해서 고치면 돼요.
+   sex: "m" 남 / "f" 여 · age: 숫자, 추정이면 "30s?" · grade: "S" "A" "B" "C" 또는 "—" */
+const DEPTS = [
+  { no:"01", en:"STRIKE TEAM", color:"#c98a5a", label:["기동대", "Strike Team", "機動隊", "机动队", "機動隊", "Equipo de Asalto"], people:[
+    { name:["차무연", "Cha Muyeon", "チャ・ムヨン", "车武延", "車武延", "Cha Muyeon"], rank:["기동대장", "Strike Team Captain", "機動隊長", "机动队长", "機動隊長", "Capitán del Equipo de Asalto"], sex:"m", age:"34", grade:"S",
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["대기 조종", "Atmokinesis", "大気操作", "大气操纵", "大氣操縱", "Control atmosférico"],
+      img:"https://i.ibb.co/8n1nqvBZ/1.png" },
+    { name:["사현서", "Sa Hyeonseo", "サ・ヒョンソ", "史贤书", "史賢書", "Sa Hyeonseo"], rank:["특임요원", "Special Agent", "特任要員", "特任干员", "特任幹員", "Agente Especial"], sex:"m", age:"27", grade:"S",
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["플라즈마", "Plasma", "プラズマ", "等离子体", "等離子體", "Plasma"],
+      img:"https://i.ibb.co/Hpdcjfr5/2.png" },
+    { name:["사현우", "Sa Hyeonwoo", "サ・ヒョンウ", "史贤宇", "史賢宇", "Sa Hyeonwoo"], rank:["특임요원", "Special Agent", "特任要員", "特任干员", "特任幹員", "Agente Especial"], sex:"m", age:"27", grade:"S",
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["절대영도", "Absolute Zero", "絶対零度", "绝对零度", "絕對零度", "Cero absoluto"],
+      img:"https://i.ibb.co/1tXwTwVy/3.png" },
+    { name:["원새벽", "Won Saebyeok", "ウォン・セビョク", "元晨", "元晨", "Won Saebyeok"], rank:["선임요원", "Senior Agent", "先任要員", "先任干员", "先任幹員", "Agente Sénior"], sex:"m", age:"29", grade:"A",
+      kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["소환문", "Summoning Door", "召喚門", "召唤门", "召喚門", "Puerta de invocación"],
+      img:"https://i.ibb.co/xtxgfnRf/4.png" },
+  ]},
+  { no:"02", en:"SPECIAL OPS", color:"#c4685f", label:["특무대", "Special Ops", "特務隊", "特务队", "特務隊", "Operaciones Especiales"], people:[
+    { name:["사공묵", "Sa Gongmuk", "サゴン・ムク", "司空默", "司空默", "Sa Gongmuk"], rank:["특무대장", "Special Ops Captain", "特務隊長", "特务队长", "特務隊長", "Capitán de Operaciones Especiales"], sex:"m", age:"37", grade:"S",
+      kind:["치유계", "Healing", "治癒系", "治愈系", "治癒系", "Curación"], ability:["불사", "Immortality", "不死", "不死", "不死", "Inmortalidad"],
+      img:"https://i.ibb.co/dw0w4JHC/16.png" },
+    { name:["백해든", "Baek Haedeun", "ペク・ヘドゥン", "白海登", "白海登", "Baek Haedeun"], rank:["특임요원", "Special Agent", "特任要員", "特任干员", "特任幹員", "Agente Especial"], sex:"m", age:"26", grade:"S",
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["전기·전자기", "Electricity · Electromagnetism", "電気・電磁気", "电·电磁", "電·電磁", "Electricidad · Electromagnetismo"],
+      img:"https://i.ibb.co/S779W0jW/18.png" },
+    { name:["위재이", "Wi Jaei", "ウィ・ジェイ", "魏在伊", "魏在伊", "Wi Jaei"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"m", age:"30", grade:"B",
+      kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["능력 흡수", "Ability Absorption", "能力吸収", "能力吸收", "能力吸收", "Absorción de habilidades"],
+      img:"https://i.ibb.co/q3PpCNQ7/17.png" },
+    { name:["편도아", "Pyeon Doa", "ピョン・ドア", "片道雅", "片道雅", "Pyeon Doa"], rank:["수습요원", "Trainee Agent", "見習い要員", "见习干员", "見習幹員", "Agente en prácticas"], sex:"f", age:"23", grade:"A",
+      kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["결계", "Barrier", "結界", "结界", "結界", "Barrera"],
+      img:"https://i.ibb.co/HLjh221X/5.png" },
+  ]},
+  { no:"03", en:"ANALYSIS", color:"#7fa3a3", label:["분석실", "Analysis", "分析室", "分析室", "分析室", "Análisis"], people:[
+    { name:["단우주", "Dan Uju", "タン・ウジュ", "段宇宙", "段宇宙", "Dan Uju"], rank:["분석실장", "Head of Analysis", "分析室長", "分析室长", "分析室長", "Jefe de Análisis"], sex:"m", age:"22", grade:"C",
+      kind:["감지계", "Sensory", "感知系", "感知系", "感知系", "Percepción"], ability:["절대 기억력", "Total Recall", "絶対記憶", "绝对记忆", "絕對記憶", "Memoria absoluta"],
+      img:"https://i.ibb.co/mrmwSc7d/7.png" },
+    { name:["하늘", "Haneul", "ハ・ヌル", "河昊", "河昊", "Haneul"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"m", age:"24", grade:"B",
+      kind:["감지계", "Sensory", "感知系", "感知系", "感知系", "Percepción"], ability:["단편적 예지", "Fragmentary Precognition", "断片的予知", "片段预知", "片段預知", "Precognición fragmentaria"],
+      img:"https://i.ibb.co/fYs0qKgS/15.png" },
+    { name:["남라온", "Nam Raon", "ナム・ラオン", "南罗温", "南羅溫", "Nam Raon"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"f", age:"23", grade:"—",
+      kind:["—", "—", "—", "—", "—", "—"], ability:["비이능 · 드론 운용", "No ability · Drone operation", "非異能 · ドローン運用", "无异能 · 无人机操作", "無異能 · 無人機操作", "Sin habilidad · Operación de drones"],
+      img:"https://i.ibb.co/93rmW7St/9.png" },
+  ]},
+  { no:"04", en:"MANAGEMENT", color:"#9d8bb8", label:["관리과", "Management", "管理課", "管理课", "管理課", "Gestión"], people:[
+    { name:["채이레", "Chae Ire", "チェ・イレ", "蔡伊礼", "蔡伊禮", "Chae Ire"], rank:["관리과장", "Head of Management", "管理課長", "管理课长", "管理課長", "Jefa de Gestión"], sex:"f", age:"28", grade:"S",
+      kind:["감지계", "Sensory", "感知系", "感知系", "感知系", "Percepción"], ability:["감정(鑑定)", "Appraisal", "鑑定", "鉴定", "鑑定", "Tasación"],
+      img:"https://i.ibb.co/2084X54H/13.png" },
+    { name:["도의현", "Do Uihyeon", "ト・ウィヒョン", "都义贤", "都義賢", "Do Uihyeon"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"m", age:"26", grade:"S",
+      kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["염동력", "Telekinesis", "念動力", "念动力", "念動力", "Telequinesis"],
+      img:"https://i.ibb.co/6c6rjQPH/0273c13b-1280-4440-b4a9-26e2e9f3e08e.png" },
+    { name:["위새봄", "Wi Saebom", "ウィ・セボム", "魏世春", "魏世春", "Wi Saebom"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"f", age:"26", grade:"B",
+      kind:["정신계", "Psychic", "精神系", "精神系", "精神系", "Mental"], ability:["최면", "Hypnosis", "催眠", "催眠", "催眠", "Hipnosis"],
+      img:"https://i.ibb.co/LD6gZmbT/14.png" },
+  ]},
+  { no:"05", en:"RECOVERY", color:"#6f9d82", label:["회복실", "Recovery", "回復室", "回复室", "回復室", "Recuperación"], people:[
+    { name:["해원결", "Hae Wongyeol", "ヘ・ウォンギョル", "海元洁", "海元潔", "Hae Wongyeol"], rank:["회복실장", "Head of Recovery", "回復室長", "回复室长", "回復室長", "Jefe de Recuperación"], sex:"m", age:"43", grade:"S",
+      kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["연령 조작", "Age Manipulation", "年齢操作", "年龄操纵", "年齡操縱", "Manipulación de la edad"],
+      img:"https://i.ibb.co/0p2xVCkQ/8.png" },
+    { name:["천태율", "Cheon Taeyul", "チョン・テユル", "千泰律", "千泰律", "Cheon Taeyul"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"m", age:"24", grade:"A",
+      kind:["치유계", "Healing", "治癒系", "治愈系", "治癒系", "Curación"], ability:["상처 전이", "Wound Transfer", "傷の転移", "伤口转移", "傷口轉移", "Transferencia de heridas"],
+      img:"https://i.ibb.co/Kp2cXy34/21.png" },
+    { name:["권파도", "Kwon Pado", "クォン・パド", "权波涛", "權波濤", "Kwon Pado"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"f", age:"26", grade:"B",
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["혈액 성형", "Blood Shaping", "血液成形", "血液塑形", "血液塑形", "Moldeado de sangre"],
+      img:"https://i.ibb.co/BM9q0Xn/22.png" },
+  ]},
+  { no:"06", en:"CLEANUP", color:"#9a9aa1", label:["수습반", "Cleanup", "収拾班", "收拾班", "收拾班", "Limpieza"], people:[
+    { name:["연혜성", "Yeon Hyeseong", "ヨン・ヘソン", "延彗星", "延彗星", "Yeon Hyeseong"], rank:["수습반장", "Head of Cleanup", "収拾班長", "收拾班长", "收拾班長", "Jefe de Limpieza"], sex:"m", age:"36", grade:"A",
+      kind:["정신계", "Psychic", "精神系", "精神系", "精神系", "Mental"], ability:["독심술", "Mind Reading", "読心術", "读心术", "讀心術", "Lectura de mentes"],
+      img:"https://i.ibb.co/VYZfqL7v/12.png" },
+    { name:["주연호", "Joo Yeonho", "チュ・ヨノ", "周延浩", "周延浩", "Joo Yeonho"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"m", age:"27", grade:"—",
+      kind:["—", "—", "—", "—", "—", "—"], ability:["비이능", "No ability", "非異能", "无异能", "無異能", "Sin habilidad"],
+      img:"https://i.ibb.co/21S8Q8sR/11.png" },
+    { name:["태사랑", "Tae Sarang", "テ・サラン", "太思朗", "太思朗", "Tae Sarang"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"f", age:"24", grade:"—",
+      kind:["—", "—", "—", "—", "—", "—"], ability:["비이능", "No ability", "非異能", "无异能", "無異能", "Sin habilidad"],
+      img:"https://i.ibb.co/dJH0nYBT/10.png" },
+  ]},
+  { no:"07", en:"COMMAND", color:"#b0b0b6", label:["수뇌부", "Command", "首脳部", "首脑部", "首腦部", "Mando"], people:[
+    { name:["남궁헌", "Namgung Heon", "ナムグン・ホン", "南宫宪", "南宮憲", "Namgung Heon"], rank:["국장", "Director", "局長", "局长", "局長", "Director"], sex:"m", age:"55", grade:"S",
+      kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["시간 열람", "Time Viewing", "時間閲覧", "时间阅览", "時間閱覽", "Visión del tiempo"],
+      img:"https://i.ibb.co/M56GpyCY/23.png" },
+  ]},
+  { no:"08", en:"CANAAN", color:"#a3584f", label:["가나안", "Canaan", "カナン", "迦南", "迦南", "Canaán"], people:[
+    { name:["「모세」", "“Moses”", "「モーセ」", "「摩西」", "「摩西」", "«Moisés»"], rank:["가나안 수장", "Leader of Canaan", "カナンの首長", "迦南首领", "迦南首領", "Líder de Canaán"], sex:"m", age:"30s?", grade:"S",
+      kind:["정신계", "Psychic", "精神系", "精神系", "精神系", "Mental"], ability:["텔레파시·세뇌", "Telepathy · Brainwashing", "テレパシー・洗脳", "心灵感应·洗脑", "心靈感應·洗腦", "Telepatía · Lavado de cerebro"],
+      img:"https://i.ibb.co/TB8Cj5YF/20.png" },
+    { name:["「미리암」", "“Miriam”", "「ミリアム」", "「米利暗」", "「米利暗」", "«Miriam»"], rank:["가나안 간부", "Canaan Executive", "カナン幹部", "迦南干部", "迦南幹部", "Alto mando de Canaán"], sex:"f", age:"20s?", grade:"S",
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["맹독", "Deadly Poison", "猛毒", "剧毒", "劇毒", "Veneno letal"],
+      img:"https://i.ibb.co/nqLq8xtd/6.png" },
+    { name:["「카인」", "“Cain”", "「カイン」", "「该隐」", "「該隱」", "«Caín»"], rank:["가나안 간부", "Canaan Executive", "カナン幹部", "迦南干部", "迦南幹部", "Alto mando de Canaán"], sex:"m", age:"20s?", grade:"S",
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["기폭·폭발", "Detonation · Explosion", "起爆・爆発", "引爆·爆炸", "引爆·爆炸", "Detonación · Explosión"],
+      img:"https://i.ibb.co/wFRCsYNX/19.png" },
+  ]},
+];
+
+/* ───────── 화면 글자 ───────── */
+const LANGS = [
+  { k:"ko",   btn:"KO",     html:"ko" },
+  { k:"en",   btn:"EN",     html:"en" },
+  { k:"ja",   btn:"日本語", html:"ja" },
+  { k:"hans", btn:"简体",   html:"zh-Hans" },
+  { k:"hant", btn:"繁體",   html:"zh-Hant" },
+  { k:"es",   btn:"ES",     html:"es" },
+];
+const UI = {
+  title:  ["인사 기록","Personnel Records","人事記録","人事记录","人事記錄","Expedientes"],
+  all:    ["전체","All","全体","全部","全部","Todos"],
+  search: ["이름 · 이능 · 계열 검색","Search name · ability · type","名前・異能・系統で検索","搜索姓名 · 异能 · 系别","搜尋姓名 · 異能 · 系別","Buscar nombre · habilidad · tipo"],
+  empty:  ["해당하는 기록이 없습니다.","No matching records.","該当する記録はありません。","没有符合的记录。","沒有符合的記錄。","No hay registros que coincidan."],
+  grade:  ["등급","Class","等級","等级","等級","Clase"],
+  kind:   ["계열","Type","系統","系别","系別","Tipo"],
+  ability:["이능","Ability","異能","异能","異能","Habilidad"],
+  close:  ["닫기","Close","閉じる","关闭","關閉","Cerrar"],
+};
+const SEX = { m:["남","M","男","男","男","H"], f:["여","F","女","女","女","M"] };
+function fmtGrade(g, li){
+  if(g==="—") return "—";
+  return [g+"급", g+"-Class", g+"級", g+"级", g+"級", "Clase "+g][li];
+}
+function fmtAge(a, li){
+  if(a.endsWith("s?")){ const n=a.slice(0,-2);
+    return [n+"대 추정","est. "+n+"s",n+"代と推定","推测"+n+"多岁","推測"+n+"多歲","unos "+n+" (est.)"][li]; }
+  return [a+"세",a,a+"歳",a+"岁",a+"歲",a+" años"][li];
+}
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let li = 0, cur = 'all', query = '';
+const pick = arr => arr[li] ?? arr[0];
+
+/* 언어: 주소 ?lang=ja → 지난번 선택 → 한국어 */
+(function(){
+  let want = new URLSearchParams(location.search).get('lang');
+  if(!want){ try{ want = localStorage.getItem('srb-lang'); }catch(e){} }
+  const i = LANGS.findIndex(l=>l.k===want || (want==='zh-hans'&&l.k==='hans') || (want==='zh-hant'&&l.k==='hant'));
+  if(i>=0) li = i;
+})();
+
+const total = DEPTS.reduce((n,d)=>n+d.people.length,0);
+const info = p => SEX[p.sex][li] + ' · ' + fmtAge(p.age, li);
+function rows(p, withGrade){
+  return `<div class="rows">${withGrade?`<div><em>${pick(UI.grade)}</em><span>${fmtGrade(p.grade,li)}</span></div>`:''}`+
+    `<div><em>${pick(UI.kind)}</em><span>${esc(pick(p.kind))}</span></div><div><em>${pick(UI.ability)}</em><span>${esc(pick(p.ability))}</span></div></div>`;
+}
+function chrome(){
+  document.documentElement.lang = LANGS[li].html;
+  document.title = pick(UI.title) + ' · NEA SRB';
+  $('#ttl').textContent = pick(UI.title);
+  $('#cnt').textContent = 'PERSONNEL FILE · ' + total;
+  $('#q').placeholder = pick(UI.search);
+  $('#empty').textContent = pick(UI.empty);
+  $('#langs').innerHTML = LANGS.map((l,i)=>`<button class="${i===li?'on':''}" data-i="${i}" lang="${l.html}">${l.btn}</button>`).join('');
+  $('#chips').innerHTML =
+    `<button class="chip${cur==='all'?' on':''}" data-k="all"><b>00</b>${pick(UI.all)}</button>` +
+    DEPTS.map(d=>`<button class="chip${cur===d.no?' on':''}" data-k="${d.no}" style="--c:${d.color}"><b>${d.no}</b>${esc(pick(d.label))}</button>`).join('');
+}
+function render(){
+  const q = query.trim().toLowerCase();
+  let shown = 0;
+  $('#list').innerHTML = DEPTS.filter(d=>cur==='all'||d.no===cur).map(d=>{
+    const ps = d.people.map((p,i)=>({p,i})).filter(({p})=>!q ||
+      [...p.name,...p.rank,...p.kind,...p.ability,fmtGrade(p.grade,li),...d.label,d.en].join(' ').toLowerCase().includes(q));
+    if(!ps.length) return '';
+    shown += ps.length;
+    const sub = pick(d.label).toUpperCase()===d.en ? '' : esc(pick(d.label));
+    return `<section class="dept" id="d${d.no}" style="--c:${d.color}">
+      <div class="dept-h"><span class="no">${d.no}</span><h2>${esc(d.en)}</h2><span class="ko">${sub}</span><span class="n">${ps.length} / ${d.people.length}</span></div>
+      <div class="grid">${ps.map(({p,i})=>`
+        <button class="card" data-d="${d.no}" data-i="${i}">
+          <div class="ph" style="background-image:url('${esc(p.img)}')"><span class="gr">${fmtGrade(p.grade,li)}</span></div>
+          <div class="bd"><div class="nm"><b>${esc(pick(p.name))}</b><span>${info(p)}</span></div><div class="rk">${esc(pick(p.rank))}</div>${rows(p,false)}</div>
+        </button>`).join('')}</div></section>`;
+  }).join('');
+  $('#empty').style.display = shown ? 'none' : 'block';
+}
+$('#langs').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  li = +b.dataset.i;
+  try{ localStorage.setItem('srb-lang', LANGS[li].k); }catch(e){}
+  const u = new URL(location.href); u.searchParams.set('lang', LANGS[li].k); history.replaceState(null,'',u);
+  chrome(); render();
+});
+$('#chips').addEventListener('click', e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  cur = b.dataset.k;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on', c===b));
+  render();
+  window.scrollTo({top: $('#list').offsetTop - 70});
+});
+$('#q').addEventListener('input', e=>{ query = e.target.value; render(); });
+
+function openP(dn,i){
+  const d = DEPTS.find(x=>x.no===dn), p = d.people[i];
+  const box = $('#box');
+  box.style.setProperty('--c', d.color);
+  box.innerHTML = `<button class="x" aria-label="${pick(UI.close)}">×</button>
+    <div class="big" style="background-image:url('${esc(p.img)}')"></div>
+    <div class="info"><div class="dp">${d.no} · ${esc(d.en)}${pick(d.label).toUpperCase()===d.en?'':' · '+esc(pick(d.label))}</div>
+      <h3>${esc(pick(p.name))}</h3><div class="meta">${info(p)}</div>
+      <span class="rk2">${esc(pick(p.rank))}</span>${rows(p,true)}</div>`;
+  $('#dlg').classList.add('on');
+}
+$('#list').addEventListener('click', e=>{ const c = e.target.closest('.card'); if(c) openP(c.dataset.d, +c.dataset.i); });
+$('#dlg').addEventListener('click', e=>{ if(e.target.id==='dlg' || e.target.closest('.x')) $('#dlg').classList.remove('on'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') $('#dlg').classList.remove('on'); });
+chrome(); render();
+</script>
+</body>
+</html>
