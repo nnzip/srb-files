@@ -94,6 +94,12 @@ html:lang(ja) body,html:lang(zh-Hans) body,html:lang(zh-Hant) body{font-family:i
 .box .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);align-self:stretch}
 .box .tags span{font-size:11.5px;color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 11px}
 .box .tags span::before{content:"#";color:var(--c);margin-right:3px}
+.noimg::after{content:"NO IMAGE";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--dim)}
+.ph .soon{position:absolute;right:10px;top:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:1px;color:var(--ink);background:rgba(17,17,19,.78);border:1px dashed var(--c);border-radius:5px;padding:3px 7px}
+.card.is-soon .ph{filter:grayscale(.45) brightness(.85)}
+.box .rkrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px}
+.box .rkrow .rk2{margin-top:0}
+.box .soon2{display:inline-block;font-size:11px;color:var(--ink);border:1px dashed var(--c);border-radius:5px;padding:1px 8px}
 @media (max-width:520px){
   .wrap{padding:0 14px}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
@@ -225,17 +231,29 @@ const DEPTS = [
       kind:["—", "—", "—", "—", "—", "—"], ability:["비이능", "No ability", "非異能", "无异能", "無異能", "Sin habilidad"],
       img:"https://i.ibb.co/dJH0nYBT/10.png" },
   ]},
-  { no:"07", en:"COMMAND", color:"#b0b0b6", label:["수뇌부", "Command", "首脳部", "首脑部", "首腦部", "Mando"], people:[
+  { no:"07", en:"SECURITY", color:"#8a95b0", label:["보안실", "Security", "保安室", "保安室", "保安室", "Seguridad"], people:[
+    { soon:true, name:["명이한", "Myeong Ihan", "ミョン・イハン", "明以闲", "明以閑", "Myeong Ihan"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"m", age:"32", grade:"S", height:191, bday:"08-10",
+      tags:[["무기력", "Listless", "無気力", "无精打采", "無精打采", "Apático"],["귀차니즘", "Can't be bothered", "面倒くさがり", "嫌麻烦", "嫌麻煩", "Desganado"],["철벽", "Ironclad", "鉄壁", "铁壁", "鐵壁", "Muro infranqueable"]],
+      kind:["조작계", "Manipulation", "操作系", "操纵系", "操縱系", "Manipulación"], ability:["중력 조작", "Gravity Manipulation", "重力操作", "重力操纵", "重力操縱", "Manipulación de la gravedad"],
+      img:"https://i.ibb.co/RTJzK8Zj/27.png" },
+  ]},
+  { no:"08", en:"DISPOSAL", color:"#b5a65a", label:["처리반", "Disposal", "処理班", "处理班", "處理班", "Saneamiento"], people:[
+    { soon:true, name:["탁나비", "Tak Nabi", "タク・ナビ", "卓娜飞", "卓娜飛", "Tak Nabi"], rank:["요원", "Agent", "要員", "干员", "幹員", "Agente"], sex:"f", age:"31", grade:"B", height:168, bday:"06-06",
+      tags:[["4차원", "Eccentric", "不思議ちゃん", "脑回路清奇", "腦迴路清奇", "Excéntrica"],["사이코", "Psycho", "サイコ", "疯批", "瘋批", "Psicópata"],["변태적 호기심", "Morbid curiosity", "猟奇的好奇心", "猎奇心", "獵奇心", "Curiosidad morbosa"]],
+      kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["침식 흡수", "Erosion Absorption", "浸食吸収", "侵蚀吸收", "侵蝕吸收", "Absorción de Erosión"],
+      img:"https://i.ibb.co/Q34qh92x/26.png" },
+  ]},
+  { no:"09", en:"COMMAND", color:"#b0b0b6", label:["수뇌부", "Command", "首脳部", "首脑部", "首腦部", "Mando"], people:[
     { name:["남궁헌", "Namgung Heon", "ナムグン・ホン", "南宫宪", "南宮憲", "Namgung Heon"], rank:["국장", "Director", "局長", "局长", "局長", "Director"], sex:"m", age:"55", grade:"S", height:183, bday:"01-01",
       tags:[["여유로움", "Unhurried", "泰然", "从容", "從容", "Sereno"],["연륜", "Seasoned", "貫禄", "老练", "老練", "Veterano"],["관객", "Spectator", "観客", "旁观者", "旁觀者", "Espectador"]],
       kind:["특이계", "Unique", "特異系", "特异系", "特異系", "Singular"], ability:["시간 열람", "Time Viewing", "時間閲覧", "时间阅览", "時間閱覽", "Visión del tiempo"],
       img:"https://i.ibb.co/M56GpyCY/23.png" },
-    { name:["강서하", "Kang Seoha", "カン・ソハ", "姜瑞夏", "姜瑞夏", "Kang Seoha"], rank:["부국장", "Deputy Director", "副局長", "副局长", "副局長", "Subdirectora"], sex:"f", age:"46", grade:"S", height:174, bday:"01-03",
+    { soon:true, name:["강서하", "Kang Seoha", "カン・ソハ", "姜瑞夏", "姜瑞夏", "Kang Seoha"], rank:["부국장", "Deputy Director", "副局長", "副局长", "副局長", "Subdirectora"], sex:"f", age:"46", grade:"S", height:174, bday:"05-31",
       tags:[["꼴초", "Chain-smoker", "ヘビースモーカー", "老烟枪", "老菸槍", "Fumadora empedernida"],["귀차니즘", "Can't be bothered", "面倒くさがり", "嫌麻烦", "嫌麻煩", "Desganada"],["자조", "Self-deprecating", "自嘲", "自嘲", "自嘲", "Autocrítica mordaz"]],
       kind:["강화계", "Enhancement", "強化系", "强化系", "強化系", "Potenciación"], ability:["신체 극한 강화", "Extreme Body Enhancement", "身体極限強化", "身体极限强化", "身體極限強化", "Potenciación corporal extrema"],
       img:"https://i.ibb.co/fzLZgtWW/25.png" },
   ]},
-  { no:"08", en:"CANAAN", color:"#a3584f", label:["가나안", "Canaan", "カナン", "迦南", "迦南", "Canaán"], people:[
+  { no:"10", en:"CANAAN", color:"#a3584f", label:["가나안", "Canaan", "カナン", "迦南", "迦南", "Canaán"], people:[
     { name:["「모세」", "“Moses”", "「モーセ」", "「摩西」", "「摩西」", "«Moisés»"], rank:["가나안 수장", "Leader of Canaan", "カナンの首長", "迦南首领", "迦南首領", "Líder de Canaán"], sex:"m", age:"30s?", grade:"S", height:187, bday:"12-25",
       tags:[["선지자", "Prophet", "預言者", "先知", "先知", "Profeta"],["가식", "Two-faced", "偽善", "虚伪", "虛偽", "Hipócrita"],["맹목", "Blind faith", "盲信", "盲目", "盲目", "Fanático"]],
       kind:["정신계", "Psychic", "精神系", "精神系", "精神系", "Mental"], ability:["텔레파시·세뇌", "Telepathy · Brainwashing", "テレパシー・洗脳", "心灵感应·洗脑", "心靈感應·洗腦", "Telepatía · Lavado de cerebro"],
@@ -270,6 +288,7 @@ const UI = {
   ability:["이능","Ability","異能","异能","異能","Habilidad"],
   height: ["키","Height","身長","身高","身高","Altura"],
   bday:   ["생일","Birthday","誕生日","生日","生日","Cumpleaños"],
+  soon:   ["업데이트 예정","Coming soon","近日追加","即将更新","即將更新","Próximamente"],
   close:  ["닫기","Close","閉じる","关闭","關閉","Cerrar"],
 };
 const SEX = { m:["남","M","男","男","男","H"], f:["여","F","女","女","女","M"] };
@@ -317,7 +336,8 @@ function chrome(){
   document.documentElement.lang = LANGS[li].html;
   document.title = pick(UI.title) + ' · NEA SRB';
   $('#ttl').textContent = pick(UI.title);
-  $('#cnt').textContent = 'PERSONNEL FILE · ' + total;
+  const soonN = DEPTS.reduce((n,d)=>n+d.people.filter(p=>p.soon).length,0);
+  $('#cnt').textContent = 'PERSONNEL FILE · ' + (total-soonN) + (soonN?' (+'+soonN+')':'');
   $('#q').placeholder = pick(UI.search);
   $('#empty').textContent = pick(UI.empty);
   $('#langs').innerHTML = LANGS.map((l,i)=>`<button class="${i===li?'on':''}" data-i="${i}" lang="${l.html}">${l.btn}</button>`).join('');
@@ -337,8 +357,8 @@ function render(){
     return `<section class="dept" id="d${d.no}" style="--c:${d.color}">
       <div class="dept-h"><span class="no">${d.no}</span><h2>${esc(d.en)}</h2><span class="ko">${sub}</span><span class="n">${ps.length} / ${d.people.length}</span></div>
       <div class="grid">${ps.map(({p,i})=>`
-        <button class="card" data-d="${d.no}" data-i="${i}">
-          <div class="ph" style="background-image:url('${esc(p.img)}')"><span class="gr">${fmtGrade(p.grade,li)}</span></div>
+        <button class="card${p.soon?' is-soon':''}" data-d="${d.no}" data-i="${i}">
+          <div class="ph${p.img?'':' noimg'}" style="${p.img?`background-image:url('${esc(p.img)}')`:''}"><span class="gr">${fmtGrade(p.grade,li)}</span>${p.soon?`<span class="soon">${pick(UI.soon)}</span>`:''}</div>
           <div class="bd"><div class="nm"><b>${esc(pick(p.name))}</b><span>${info(p)}</span></div><div class="rk">${esc(pick(p.rank))}</div>${rows(p,false)}</div>
         </button>`).join('')}</div></section>`;
   }).join('');
@@ -365,10 +385,10 @@ function openP(dn,i){
   const box = $('#box');
   box.style.setProperty('--c', d.color);
   box.innerHTML = `<button class="x" aria-label="${pick(UI.close)}">×</button>
-    <div class="big"><img src="${esc(p.img)}" alt="${esc(pick(p.name))}"></div>
+    <div class="big${p.img?'':' noimg'}">${p.img?`<img src="${esc(p.img)}" alt="${esc(pick(p.name))}">`:''}</div>
     <div class="info"><div class="dp">${d.no} · ${esc(d.en)}${pick(d.label).toUpperCase()===d.en?'':' · '+esc(pick(d.label))}</div>
       <h3>${esc(pick(p.name))}</h3><div class="meta">${info(p)}</div>
-      <span class="rk2">${esc(pick(p.rank))}</span>${rows(p,true)}${p.tags?`<div class="tags">${p.tags.map(x=>`<span>${esc(pick(x))}</span>`).join('')}</div>`:''}</div>`;
+      <div class="rkrow"><span class="rk2">${esc(pick(p.rank))}</span>${p.soon?`<span class="soon2">${pick(UI.soon)}</span>`:''}</div>${rows(p,true)}${p.tags?`<div class="tags">${p.tags.map(x=>`<span>${esc(pick(x))}</span>`).join('')}</div>`:''}</div>`;
   $('#dlg').classList.add('on');
 }
 $('#list').addEventListener('click', e=>{ const c = e.target.closest('.card'); if(c) openP(c.dataset.d, +c.dataset.i); });
